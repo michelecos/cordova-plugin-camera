@@ -60,14 +60,20 @@ typedef NSUInteger CDVMediaType;
 @property (assign) BOOL usesGeolocation;
 @property (assign) BOOL cropToSize;
 
+@property NSString* overlayImageURL;
+
 + (instancetype) createFromTakePictureArguments:(CDVInvokedUrlCommand*)command;
 
 @end
+
+@class CameraPickerOverlay;
 
 @interface CDVCameraPicker : UIImagePickerController
 
 @property (strong) CDVPictureOptions* pictureOptions;
 
+@property (strong, nonatomic) IBOutlet UIImageView *overlayImageView;
+@property (strong) CameraPickerOverlay * customOverlay;
 @property (copy)   NSString* callbackId;
 @property (copy)   NSString* postUrl;
 @property (strong) UIPopoverController* pickerPopoverController;
@@ -112,5 +118,20 @@ typedef NSUInteger CDVMediaType;
 
 - (void)locationManager:(CLLocationManager*)manager didUpdateToLocation:(CLLocation*)newLocation fromLocation:(CLLocation*)oldLocation;
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error;
+
+@end
+
+
+@interface CameraPickerOverlay : UIView
+@property (weak, nonatomic) UIImagePickerController* delegate;
+@property (strong) UIImageView* overlayImageView;
+@property NSString* url;
+
+- (instancetype)initWithDelegate:(UIImagePickerController*)delegate url:(NSString*)url frame:(CGRect)frame;
+- (void)addOverlayImageView;
+
+- (void)takePicture;
+
+- (void)dismiss;
 
 @end

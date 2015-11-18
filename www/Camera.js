@@ -25,7 +25,7 @@ var argscheck = require('cordova/argscheck'),
     // XXX: commented out
     //CameraPopoverHandle = require('./CameraPopoverHandle');
 
-/** 
+/**
  * @namespace navigator
  */
 
@@ -75,42 +75,43 @@ for (var key in Camera) {
  * @property {Boolean} [saveToPhotoAlbum] - Save the image to the photo album on the device after capture.
  * @property {module:CameraPopoverOptions} [popoverOptions] - iOS-only options that specify popover location in iPad.
  * @property {module:Camera.Direction} [cameraDirection=BACK] - Choose the camera to use (front- or back-facing).
+ * @property {string} [overlayImageURL] - The URL of an optional transparent image to appear over the camera view
  */
 
 /**
  * @description Takes a photo using the camera, or retrieves a photo from the device's
  * image gallery.  The image is passed to the success callback as a
- * base64-encoded `String`, or as the URI for the image file.  
- * 
+ * base64-encoded `String`, or as the URI for the image file.
+ *
  * The `camera.getPicture` function opens the device's default camera
  * application that allows users to snap pictures by default - this behavior occurs,
- * when `Camera.sourceType` equals [`Camera.PictureSourceType.CAMERA`]{@link module:Camera.PictureSourceType}.  
+ * when `Camera.sourceType` equals [`Camera.PictureSourceType.CAMERA`]{@link module:Camera.PictureSourceType}.
  * Once the user snaps the photo, the camera application closes and the application is restored.
- * 
+ *
  * If `Camera.sourceType` is `Camera.PictureSourceType.PHOTOLIBRARY` or
  * `Camera.PictureSourceType.SAVEDPHOTOALBUM`, then a dialog displays
  * that allows users to select an existing image.  The
  * `camera.getPicture` function returns a [`CameraPopoverHandle`]{@link module:CameraPopoverHandle} object,
  * which can be used to reposition the image selection dialog, for
  * example, when the device orientation changes.
- * 
+ *
  * The return value is sent to the [`cameraSuccess`]{@link module:camera.onSuccess} callback function, in
  * one of the following formats, depending on the specified
  * `cameraOptions`:
- * 
+ *
  * - A `String` containing the base64-encoded photo image.
- * 
+ *
  * - A `String` representing the image file location on local storage (default).
- * 
+ *
  * You can do whatever you want with the encoded image or URI, for
  * example:
- * 
+ *
  * - Render the image in an `<img>` tag, as in the example below
- * 
+ *
  * - Save the data locally (`LocalStorage`, [Lawnchair](http://brianleroux.github.com/lawnchair/), etc.)
- * 
+ *
  * - Post the data to a remote server
- * 
+ *
  * __NOTE__: Photo resolution on newer devices is quite good. Photos
  * selected from the device's gallery are not downscaled to a lower
  * quality, even if a `quality` parameter is specified.  To avoid common
@@ -147,9 +148,11 @@ cameraExport.getPicture = function(successCallback, errorCallback, options) {
     var saveToPhotoAlbum = !!options.saveToPhotoAlbum;
     var popoverOptions = getValue(options.popoverOptions, null);
     var cameraDirection = getValue(options.cameraDirection, Camera.Direction.BACK);
+    var overlayImageURL = getValue(options.overlayImageURL, null);
 
     var args = [quality, destinationType, sourceType, targetWidth, targetHeight, encodingType,
-                mediaType, allowEdit, correctOrientation, saveToPhotoAlbum, popoverOptions, cameraDirection];
+            mediaType, allowEdit, correctOrientation, saveToPhotoAlbum, popoverOptions,
+            cameraDirection, overlayImageURL];
 
     exec(successCallback, errorCallback, "Camera", "takePicture", args);
     // XXX: commented out
@@ -164,11 +167,11 @@ cameraExport.getPicture = function(successCallback, errorCallback, options) {
  *
  * __Supported Platforms__
  *
- * ![](doc/img/android-fail.png) ![](doc/img/blackberry-fail.png) ![](doc/img/browser-fail.png) ![](doc/img/firefox-fail.png) ![](doc/img/fireos-fail.png) ![](doc/img/ios-success.png) ![](doc/img/windows-fail.png) ![](doc/img/wp8-fail.png) ![](doc/img/ubuntu-fail.png) 
+ * ![](doc/img/android-fail.png) ![](doc/img/blackberry-fail.png) ![](doc/img/browser-fail.png) ![](doc/img/firefox-fail.png) ![](doc/img/fireos-fail.png) ![](doc/img/ios-success.png) ![](doc/img/windows-fail.png) ![](doc/img/wp8-fail.png) ![](doc/img/ubuntu-fail.png)
  *
  * @example
  * navigator.camera.cleanup(onSuccess, onFail);
- * 
+ *
  * function onSuccess() {
  *     console.log("Camera cleanup success.")
  * }
